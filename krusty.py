@@ -8,17 +8,19 @@ class Controller(object):
     """
     Kontroller.
     """
-    def __init__(self, size=None):
+    def __init__(self, size=None, debug=False):
         """
         Konstruktor för kontrollern.
         Args:
-            size:   Tar in en sträng motsvarandes fönstrets storlek och dess position (BREDDxHLJD+X+Y). 
-                    Vid None, anpassas förnstret responsivt till dess innehåll och hamnar i position 1x1.
+            size:       Tar in en sträng motsvarandes fönstrets storlek och dess position (BREDDxHLJD+X+Y). 
+                        Vid None, anpassas förnstret responsivt till dess innehåll och hamnar i position 1x1.
+            debug:      Booleanisk uttryck där True aktiverar debug-tabben. False som standard.
         """
         self.root = Tk()
         self.root.geometry(size)
+        self.debug = debug
         self.model = Model()
-        self.view = View(self.root)
+        self.view = View(self.root, self.debug)
 
     def run(self):
         """
@@ -31,23 +33,28 @@ class View(object):
     """
     Vynivån.
     """
-    def __init__(self, master):
+    def __init__(self, master, debug=False):
         """
-        Konstruktorn för vynivån
+        Konstruktorn för vynivån.
         Args:
             master: Tar in ett Tk()-objekt
         """
         self.master = master
+        self.debug = debug
         self.master.title('Krustys övervakningsverktyg')
         self.notebook()
 
     def notebook(self):
         """
-        Tab.
+        Renderar ut flik-komponenter för att representera lager-, produktions- 
+        och leveransenheten genom att användaren klickar på respektive flik.
+        Om debug är True, renderas även en Debug-flik.
         """
         notebook = Notebook(self.master)
         notebook.pack(fill=BOTH, expand=True)
-        title = ['Lagerenheten', 'Produktionsenheten', 'Leveransenheten', 'Simulatorn']
+        title = ['Lagerenheten', 'Produktionsenheten', 'Leveransenheten']
+        if self.debug is True:
+            title += ['Debug']
         for i in range(len(title)):
             frame = Frame(notebook)
             notebook.add(frame, text=title[i])
@@ -108,5 +115,5 @@ class Database(object):
 
 # MAIN
 if __name__ == '__main__':
-    app = Controller('800x600+100+100')
+    app = Controller('800x600+100+100', debug=True)
     app.run()
