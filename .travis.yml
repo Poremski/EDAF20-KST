@@ -7,22 +7,6 @@ python:
   - "3.6"
 env:
   - DB=sqlite
-matrix:
-  exclude:
-     - python: "3.2"
-     - env: DB=sqlite
-  exclude:
-     - python: "3.3"
-     - env: DB=sqlite
-  exclude:
-     - python: "3.4"
-     - env: DB=sqlite
-  exclude:
-     - python: "3.5"
-     - env: DB=sqlite
-  exclude:
-     - python: "3.6"
-     - env: DB=sqlite
 sqlite:
   adapter: sqlite3
   database: krusty.db
