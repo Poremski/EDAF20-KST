@@ -1,0 +1,10 @@
+## SOURCE CODE
+*.py        text
+*.sql       text
+*.css       text
+
+## EXECUTABLES
+*.pyc       binary
+
+## BINARY FILES
+*.db        binary
