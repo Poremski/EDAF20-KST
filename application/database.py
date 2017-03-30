@@ -40,3 +40,45 @@ class Database(object):
         ''')
         self.close()
         return cursor
+
+    def get_customers(self):
+        """
+        Hämtar användardata för alla användare som finns i databasen.
+        Returns:
+            Returnerar en lista.
+        """
+        self.open()
+        cursor = self.conn.execute('''
+            SELECT id, customer, address, country
+            FROM customers
+        ''')
+        self.close()
+        return cursor
+
+    def get_ingredients(self):
+        """
+        Hämtar alla ingredienser som finns i databasen.
+        Returns:
+            Returnerar en lista.
+        """
+        self.open()
+        cursor = self.conn.execute('''
+            SELECT id, ingredient
+            FROM ingredients
+        ''')
+        self.close()
+        return cursor
+
+    def get_products(self):
+        """
+        Hämtar alla produkter som finns i databasen.
+        Returns:
+            Returnerar en lista.
+        """
+        self.open()
+        cursor = self.conn.execute('''
+            SELECT id, product
+            FROM products
+        ''')
+        self.close()
+        return cursor
