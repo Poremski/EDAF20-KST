@@ -53,8 +53,9 @@ class Database(object):
             SELECT id, customer, address, country
             FROM customers
         ''')
+        list = cursor.fetchall()
         self.close()
-        return cursor
+        return list
 
     def get_ingredients(self):
         """
@@ -67,8 +68,9 @@ class Database(object):
             SELECT id, ingredient
             FROM ingredients
         ''')
+        list = cursor.fetchall()
         self.close()
-        return cursor
+        return list
 
     def get_products(self):
         """
@@ -81,5 +83,21 @@ class Database(object):
             SELECT id, product
             FROM products
         ''')
+        list = cursor.fetchall()
         self.close()
-        return cursor
+        return list
+
+    def get_units(self):
+        """
+        Hämtar alla enheter som finns i databasen.
+        Returnerar:
+            Returnerar en lista.
+        """
+        self.open()
+        cursor = self.conn.execute('''
+            SELECT unit, name
+            FROM units
+        ''')
+        list = cursor.fetchall()
+        self.close()
+        return list

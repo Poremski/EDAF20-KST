@@ -154,8 +154,116 @@ class View(object):
         Args:
             frame:  Tar in underliggande vylager.
         """
+        self.supply_unit_recipes_edit_delete_product(frame)
+        self.supply_unit_recipes_edit_delete_ingredient(frame)
+        self.supply_unit_recipes_edit_add_product(frame)
+        self.supply_unit_recipes_edit_add_ingredient(frame)
+        self.supply_unit_recipes_edit_add_ingredient_to_product(frame)
 
-        None
+    def supply_unit_recipes_edit_delete_product(self, frame):
+        """
+        Renderar formulärvyn för borttagnings av produkter.
+        Args:
+            frame: Tar in underliggande vylager.
+        """
+        p = Panedwindow(frame, orient=VERTICAL)
+        f = Labelframe(p, text='Ta bort produkt')
+        p.add(f)
+        Label(f, text='Produkt:').pack(side=LEFT)
+        btn = Button(f, text='Ta bort').pack(side=RIGHT)
+        product_var = StringVar()
+        products = Combobox(f, textvariable=product_var, state='readonly')
+        product_dict = self.model.get_products()
+        products['values'] = sorted(list(product_dict.values()))
+        products.pack(side=RIGHT, fill=X, expand=TRUE)
+        p.pack(fill=BOTH, expand=1)
+
+    def supply_unit_recipes_edit_delete_ingredient(self, frame):
+        """
+        Renderar formulärvyn för borttagnings av ingredienser.
+        Args:
+            frame: Tar in underliggande vylager.
+        """
+        p = Panedwindow(frame, orient=VERTICAL)
+        f = Labelframe(p, text='Ta bort ingrediens')
+        p.add(f)
+        Label(f, text='Ingrediens:').pack(side=LEFT)
+        btn = Button(f, text='Ta bort').pack(side=RIGHT)
+        ingredient_var = StringVar()
+        ingredient = Combobox(f, textvariable=ingredient_var, state='readonly')
+        ingredient_dict = self.model.get_ingredients()
+        ingredient['values'] = sorted(list(ingredient_dict.values()))
+        ingredient.pack(side=RIGHT, fill=X, expand=TRUE)
+        p.pack(fill=BOTH, expand=1)
+
+    def supply_unit_recipes_edit_add_product(self, frame):
+        """
+        Renderar formulärvyn för tilläggning av produkter.
+        Args:
+            frame: Tar in underliggande vylager.
+        """
+        p = Panedwindow(frame, orient=VERTICAL)
+        f = Labelframe(p, text='Skapa produkt')
+        p.add(f)
+        Label(f, text='Produkt:').pack(side=LEFT)
+        btn = Button(f, text='Lägg till').pack(side=RIGHT)
+        product = Entry(f).pack(side=RIGHT, fill=X, expand=TRUE)
+        p.pack(fill=BOTH, expand=1)
+
+    def supply_unit_recipes_edit_add_ingredient(self, frame):
+        """
+        Renderar formulärvyn för tilläggning av ingredienser.
+        Args:
+            frame: Tar in underliggande vylager.
+        """
+        p = Panedwindow(frame, orient=VERTICAL)
+        f = Labelframe(p, text='Skapa ingrediens')
+        p.add(f)
+        Label(f, text='Ingrediens:').pack(side=LEFT)
+        btn = Button(f, text='Lägg till').pack(side=RIGHT)
+        product = Entry(f).pack(side=RIGHT, fill=X, expand=TRUE)
+        p.pack(fill=BOTH, expand=1)
+
+    def supply_unit_recipes_edit_add_ingredient_to_product(self, frame):
+        """
+        Renderar formulärvyn för koppling av viss ingrediens till given produkt.
+        Args:
+            frame: Tar in underliggande vylager.
+        """
+        p = Panedwindow(frame, orient=VERTICAL)
+        f = Labelframe(p, text='Lägg till ingrediens till produkt')
+        p.add(f)
+
+        p1 = PanedWindow(f)
+        Label(p1, text='Produkt:').pack(side=LEFT)
+        product_var = StringVar()
+        products = Combobox(p1, textvariable=product_var, state='readonly')
+        product_dict = self.model.get_products()
+        products['values'] = sorted(list(product_dict.values()))
+        products.pack(side=RIGHT, fill=X, expand=TRUE)
+        p1.pack(fill=BOTH, expand=1)
+
+        p2 = PanedWindow(f)
+        Label(p2, text='Ingrediens:').pack(side=LEFT)
+        ingredient_var = StringVar()
+        ingredient = Combobox(p2, textvariable=ingredient_var, state='readonly')
+        ingredient_dict = self.model.get_ingredients()
+        ingredient['values'] = sorted(list(ingredient_dict.values()))
+        ingredient.pack(side=RIGHT, fill=X, expand=TRUE)
+        p2.pack(fill=BOTH, expand=1)
+
+        p3 = PanedWindow(f)
+        Label(p3, text='Mängd:').pack(side=LEFT)
+        btn = Button(f, text='Lägg till').pack(side=RIGHT)
+        unit_var = StringVar()
+        units = Combobox(p3, textvariable=unit_var, state='readonly')
+        units_dict = self.model.get_units()
+        units['values'] = sorted(list(units_dict.keys()))
+        units.pack(side=RIGHT)
+        amount = Entry(p3).pack(side=RIGHT, fill=X, expand=TRUE)
+        p3.pack(fill=BOTH, expand=1)
+
+        p.pack(fill=BOTH, expand=1)
 
 
     def production_unit(self, master):
