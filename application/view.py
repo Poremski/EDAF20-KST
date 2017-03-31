@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter.ttk import *
+from .model import Model
 
 
 class View(object):
@@ -9,12 +10,13 @@ class View(object):
     def __init__(self, master, debug=False):
         """
         Konstruktorn för vynivån.
-        Args:
+        Argument:
             master: Tar in ett Tk()-objekt
         """
         self.master = master
         self.debug = debug
         self.master.title('Krustys övervakningsverktyg')
+        self.model = Model()
         self.notebook()
 
     def notebook(self):
@@ -31,26 +33,76 @@ class View(object):
         for i in range(len(title)):
             frame = Frame(notebook)
             notebook.add(frame, text=title[i])
+            self.set_unit_frame(title[i], frame)
 
-    def supply_unit(self):
+    def set_unit_frame(self, unit, frame):
+        """
+        Returnerar efterfrågan flik-komponent
+        Argument:
+            unit:   Sträng av motsvarades 'Lagerenheten', 'Produktionsenheten', 
+                    'Leveransenheten' eller 'Debug'.
+            frame:  Referens till underliggande framelager
+
+        Returnerar: Returnerar metod som renderar efterfrågad filk-komponent.
+
+        """
+        if unit is 'Lagerenheten': self.supply_unit(frame)
+        elif unit is 'Produktionsenheten': self.production_unit(frame)
+        elif unit is 'Leveransenheten': self.delivery_unit(frame)
+        elif unit is 'Debug': self.debug_simulator(frame)
+        else:
+            raise AssertionError('FEL: Flik-komponenten är okänd i view.set_unit_frame().', unit)
+
+    def supply_unit(self, frame):
         """
         Renderar tabb-vyn för lagerenheten.
         """
-        None
+        notebook = Notebook(frame)
+        notebook.pack(fill=BOTH, expand=True)
 
-    def production_unit(self):
+        frame1 = Frame(notebook)
+        self.supply_unit_recipes(frame1)
+
+        notebook.add(frame1, text='Recept')
+        frame2 = Frame(notebook)
+        notebook.add(frame2, text='Ändra')
+
+    def supply_unit_recipes(self, frame):
+        tree = Treeview(frame)
+        tree['columns'] = ('A', 'B')
+        tree.column('A', width=200)
+        tree.column('B', width=50)
+        tree.heading('A', text='Ingrediens')
+        tree.heading('B', text='Mängd')
+
+        recipes = self.model.get_recipes()
+        last_product = 0
+        for recipe in recipes:
+            if last_product is recipe[0]:
+                tree.insert(recipe[0], recipe[0], '',
+                            values=(recipe[2], '%s %s' % (str(recipe[3]), recipe[4])))
+            else:
+                tree.insert("", recipe[0], recipe[0], text=recipe[1])
+                tree.insert(recipe[0], recipe[0], text='',
+                            values=(recipe[2], '%s %s' % (str(recipe[3]), recipe[4])))
+                last_product = recipe[0]
+
+        tree.pack(fill=BOTH, expand=True)
+
+
+    def production_unit(self, master):
         """
         Renderar tabb-vyn för produktionsenheten.
         """
         None
 
-    def delivery_unit(self):
+    def delivery_unit(self, master):
         """
         Renderar tabb-vyn för leveransenheten.
         """
         None
 
-    def simulation(self):
+    def debug_simulator(self, master):
         """
         Renderar tabb-vyn för simulatorn.
         """

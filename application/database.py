@@ -29,7 +29,7 @@ class Database(object):
     def get_recipes(self):
         """
         Hämtar ingredienserna för alla produkter som finns i databasen.
-        Returns:
+        Returnerar:
             Returnerar en lista.
         """
         self.open()
@@ -37,6 +37,49 @@ class Database(object):
             SELECT r.productId, p.product, i.ingredient, r.quantity, r.unit
             FROM recipes AS r, products AS p, ingredients AS i
             WHERE r.productId = p.id AND r.ingredientId = i.id
+        ''')
+        list = cursor.fetchall()
+        self.close()
+        return list
+
+    def get_customers(self):
+        """
+        Hämtar användardata för alla användare som finns i databasen.
+        Returnerar:
+            Returnerar en lista.
+        """
+        self.open()
+        cursor = self.conn.execute('''
+            SELECT id, customer, address, country
+            FROM customers
+        ''')
+        self.close()
+        return cursor
+
+    def get_ingredients(self):
+        """
+        Hämtar alla ingredienser som finns i databasen.
+        Returnerar:
+            Returnerar en lista.
+        """
+        self.open()
+        cursor = self.conn.execute('''
+            SELECT id, ingredient
+            FROM ingredients
+        ''')
+        self.close()
+        return cursor
+
+    def get_products(self):
+        """
+        Hämtar alla produkter som finns i databasen.
+        Returnerar:
+            Returnerar en lista.
+        """
+        self.open()
+        cursor = self.conn.execute('''
+            SELECT id, product
+            FROM products
         ''')
         self.close()
         return cursor
