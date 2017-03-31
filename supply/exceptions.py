@@ -1,0 +1,2 @@
+class SupplyError(Exception):
+    pass
