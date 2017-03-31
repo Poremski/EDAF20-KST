@@ -78,14 +78,10 @@ class View(object):
         recipes = self.model.get_recipes()
         last_product = 0
         for recipe in recipes:
-            if last_product is recipe[0]:
-                tree.insert(recipe[0], recipe[0], '',
-                            values=(recipe[2], '%s %s' % (str(recipe[3]), recipe[4])))
-            else:
+            if last_product is not recipe[0]:
                 tree.insert("", recipe[0], recipe[0], text=recipe[1])
-                tree.insert(recipe[0], recipe[0], text='',
-                            values=(recipe[2], '%s %s' % (str(recipe[3]), recipe[4])))
                 last_product = recipe[0]
+            tree.insert(recipe[0], recipe[0], '', values=(recipe[2], '%s %s' % (str(recipe[3]), recipe[4])))
 
         tree.pack(fill=BOTH, expand=True)
 
