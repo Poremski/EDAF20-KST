@@ -8,3 +8,5 @@
 
 ## BINARY FILES
 *.db        binary
+*.gif       binary
+*.base64    binary

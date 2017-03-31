@@ -1,6 +1,9 @@
+#!/usr/bin/env python3
 from tkinter import *
 from tkinter.ttk import *
 from .model import Model
+import platform
+import os
 
 
 class View(object):
@@ -16,8 +19,62 @@ class View(object):
         self.master = master
         self.debug = debug
         self.master.title('Krustys övervakningsverktyg')
+        self.menu()
         self.model = Model()
         self.notebook()
+
+    def menu(self):
+        menu = Menu(self.master)
+        self.master.config(menu=menu)
+
+        file_menu = Menu(menu, tearoff=0)
+        menu.add_cascade(label='Arkiv', menu=file_menu)
+
+        if platform.system() in ['Windows', 'Linux']:
+            help_menu = Menu(menu, tearoff=0)
+            menu.add_cascade(label='Hjälp', menu=help_menu)
+            help_menu.add_command(label='Om...', command=self.about_dlg)
+        else:
+            file_menu.add_command(label='Om...', command=self.about_dlg)
+            file_menu.add_separator()
+        file_menu.add_command(label='Avsluta', command=self.master.quit)
+
+    def about_dlg(self):
+        """
+        Dialogfönstret "Om…"
+        """
+        about = Toplevel()
+        about.title('Om Krustys övervakningsverktyg')
+        about.resizable(FALSE, FALSE)
+        about.geometry('+200+200')
+
+        frame = Frame(about)
+        frame.pack()
+
+        with open(os.path.join(os.getcwd(), 'application/KST.base64'), 'r') as file:
+            img_data = file.readlines()
+       
+        img = PhotoImage(data=img_data)
+        logo = Label(frame, image=img)
+        logo.image = img
+        logo.grid(row=1, column=0)
+
+        Label(frame, text='Krustys övervakningsverktyg').grid(row=0, columnspan=2)
+
+        txtmsg = 'Detta program är utformat som en del av ett projekt i kursen Databasteknik (EDAF20) \n' \
+                 'vid LTH Campus Helsingborg, där ett verktyg utifrån specifika funktionalitetsönskemål\n' \
+                 'skulle implementeras.\n\n' \
+                 'Genom den teoretiska kunskap vi har tillägnat oss under kursens gång, har vi kunnat \n' \
+                 'tillämpa kunskapen praktiskt och utveckla programgränssnitt till en databas med \n' \
+                 'efterfrågad funktionalitet.\n\n' \
+                 'Vi har genom detta därmed uppnått de mål som uttrycks i kursplanen för den berörda \n' \
+                 'kursen.\n\n' \
+                 'De involverade i projektet:\n     Javier Poremski och Simon Farre\n' \
+                 'Datum:\n     2017-03-31'
+
+        Label(frame, text=txtmsg).grid(row=1, column=1)
+
+        Button(frame, text='Stäng', command=about.destroy).grid(row=2, columnspan=2)
 
     def notebook(self):
         """
@@ -61,13 +118,19 @@ class View(object):
         notebook.pack(fill=BOTH, expand=True)
 
         frame1 = Frame(notebook)
-        self.supply_unit_recipes(frame1)
-
+        self.supply_unit_recipes_view(frame1)
         notebook.add(frame1, text='Recept')
+
         frame2 = Frame(notebook)
+        self.supply_unit_recipes_edit(frame2)
         notebook.add(frame2, text='Ändra')
 
-    def supply_unit_recipes(self, frame):
+    def supply_unit_recipes_view(self, frame):
+        """
+        Renderar vyn för: Lagerenheten -> Recept.
+        Args:
+            frame:  Tar in underliggade vylager.
+        """
         tree = Treeview(frame)
         tree['columns'] = ('A', 'B')
         tree.column('A', width=200)
@@ -78,16 +141,21 @@ class View(object):
         recipes = self.model.get_recipes()
         last_product = 0
         for recipe in recipes:
-            if last_product is recipe[0]:
-                tree.insert(recipe[0], recipe[0], '',
-                            values=(recipe[2], '%s %s' % (str(recipe[3]), recipe[4])))
-            else:
+            if last_product is not recipe[0]:
                 tree.insert("", recipe[0], recipe[0], text=recipe[1])
-                tree.insert(recipe[0], recipe[0], text='',
-                            values=(recipe[2], '%s %s' % (str(recipe[3]), recipe[4])))
                 last_product = recipe[0]
+            tree.insert(recipe[0], recipe[0], '', values=(recipe[2], '%s %s' % (str(recipe[3]), recipe[4])))
 
         tree.pack(fill=BOTH, expand=True)
+
+    def supply_unit_recipes_edit(self, frame):
+        """
+        Renderar vyn för: Lagerenheten -> Ändra.
+        Args:
+            frame:  Tar in underliggande vylager.
+        """
+
+        None
 
 
     def production_unit(self, master):
