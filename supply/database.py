@@ -44,7 +44,7 @@ class Database(object):
 
     def set_recipes(self, product_id, ingredient_id, quantity, unit):
         """
-        Lägger till ingrediens till en produkt.
+        Lägger till recept för en produkt.
         Returnerar:
             Returnerar en lista.
         """
@@ -77,8 +77,8 @@ class Database(object):
         """
         self.open()
         t = (product_name, )
-        cursor = self.conn.execute("INSERT INTO products (product) VALUES ('?')" % t)
-        c = self.conn.commit()
+        self.conn.execute("INSERT INTO products (product) VALUES ('%s')" % t)
+        self.conn.commit()
         self.close()
         return False
 
@@ -121,7 +121,7 @@ class Database(object):
         """
         self.open()
         t = (ingredient_name, )
-        self.conn.execute("INSERT INTO ingredients (ingredient) VALUES ('?')" % t)
+        self.conn.execute("INSERT INTO ingredients (ingredient) VALUES ('%s')" % t)
         self.conn.commit()
         self.close()
         return False
@@ -137,8 +137,9 @@ class Database(object):
         """
         self.open()
         t = (ingredient_id, )
-        self.conn.execute("DELETE FROM ingredients WHERE id = ?" % t)
-        self.conn.execute("DELETE FROM recipes WHERE ingredientId = ?" % t)
+        self.conn.execute("DELETE FROM ingredients WHERE id = %s" % t)
+        self.conn.execute("DELETE FROM recipes WHERE ingredientId = %s" % t)
+        self.conn.commit()
         self.close()
         return False
 

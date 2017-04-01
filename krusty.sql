@@ -32,7 +32,7 @@ INSERT INTO 'units' (unit, name) VALUES
 CREATE TABLE ingredients
 (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    ingredient TEXT NOT NULL UNIQUE
+    ingredient TEXT NOT NULL
 );
 CREATE UNIQUE INDEX ingredients_ingredient_uindex ON ingredients (ingredient);
 INSERT INTO 'ingredients' (ingredient) VALUES
@@ -45,7 +45,7 @@ INSERT INTO 'ingredients' (ingredient) VALUES
 CREATE TABLE products
 (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    product TEXT NOT NULL UNIQUE
+    product TEXT NOT NULL
 );
 CREATE UNIQUE INDEX products_product_uindex ON products (product);
 INSERT INTO 'products' (product) VALUES

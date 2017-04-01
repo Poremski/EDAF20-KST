@@ -34,3 +34,14 @@ class Model:
     def del_products_var(self, product_id):
         self.db.del_product(product_id)
         self.data_changed_delegate()
+
+    def get_ingredients_var(self):
+        return [list(i) for i in self.db.get_ingredients()]
+
+    def set_ingredients_var(self, ingredients_name):
+        self.db.set_ingredients(ingredients_name)
+        self.data_changed_delegate()
+
+    def del_ingredients_var(self, ingredients_id):
+        self.db.del_ingredients(ingredients_id)
+        self.data_changed_delegate()
