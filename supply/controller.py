@@ -1,6 +1,6 @@
 from .configurations import *
-from .model import *
 from .view import *
+from .model import *
 
 
 class Controller:
@@ -16,4 +16,6 @@ class Controller:
         self.parent.title(APP_NAME)
         self.parent.geometry(WIN_GEOMETRY)
         self.model = Model(self)
-        self.view = View(self)
+        self.view = View(self, self.parent, self.model.get_recipes_dict())
+        self.view.recipes_var = self.model.get_recipes_dict()
+

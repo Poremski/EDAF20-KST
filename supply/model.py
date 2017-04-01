@@ -1,6 +1,4 @@
-from . import configurations
-
-
+from .database import *
 class Model:
     """
     Modellen:   Klassen innehåller datastrukturen.
@@ -14,3 +12,12 @@ class Model:
     """
     def __init__(self, vc):
         self.vc = vc
+        self.db = Database()
+        self.recipes_var = self.get_recipes_dict()
+
+    def get_recipes_dict(self):
+        self.set_recipes_dict()
+        return self.recipes_var
+
+    def set_recipes_dict(self):
+        self.recipes_var = self.db.get_recipes()

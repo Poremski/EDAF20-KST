@@ -1,11 +1,7 @@
-from . import configurations
-from . import controller
-try:
-    from Tkinter import *
-    from Tkinter.ttk import *
-except:
-    from tkinter import *
-    from tkinter import *
+from .configurations import *
+from .controller import *
+from tkinter import *
+from tkinter.ttk import *
 
 
 class View(Frame):
@@ -17,11 +13,44 @@ class View(Frame):
           -- Vyn har setters och getters som den använder för att kommunicerar 
              med Kontrollern.
     """
-    def __init__(self, vc):
-        self.vc = vc
-        self.frame = Frame()
-        self.frame.grid(row = 0, column = 0)
-        self.load_view()
+    def __init__(self, vc, parent, recipes):
+        self.vc = vc  # delegate/callback pointer
 
-    def load_view(self):
-        pass
+        self.main_frame = Frame(parent)
+        self.main_frame.pack(fill=BOTH, expand=True)
+
+        self.notebook = Notebook(self.main_frame)
+        self.notebook.pack(fill=BOTH, expand=True)
+
+        self.recipes_var = recipes
+
+        self.widget_recipes()
+        # self.widget_config()
+
+    def widget_recipes(self):
+        frame = Frame(self.notebook)
+        self.notebook.add(frame, text='Recept')
+
+        scrollbar = Scrollbar(frame)
+        scrollbar.pack(side=RIGHT, fill=Y)
+
+        tree = Treeview(frame, yscrollcommand=scrollbar.set)
+        tree['columns'] = ('A', 'B')
+        tree.column('A', width=200)
+        tree.column('B', width=50)
+        tree.heading('A', text='Ingrediens')
+        tree.heading('B', text='Mängd')
+        tree.pack(fill=BOTH, expand=True)
+
+        scrollbar.config(command=tree.yview)
+
+
+        last_product = 0
+        for value in self.recipes_var:
+            if value[0] is not last_product:
+                tree.insert("", value[0], value[0], text=value[1])
+                last_product = value[0]
+            tree.insert(value[0], value[0], '', values=(value[2], '%s %s' % (str(value[3]), value[4])))
+
+
+
