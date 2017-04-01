@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter.ttk import *
 
 
-class View(Frame):
+class View():
     """
     Vy:   Klassen hanterar element som kretsar kring användargränssnittet.
           -- Kontrollern kan skicka meddelanden till Vyn.

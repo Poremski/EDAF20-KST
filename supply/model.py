@@ -13,17 +13,24 @@ class Model:
     def __init__(self, vc):
         self.vc = vc
         self.db = Database()
-        self.recipes_var = None
-        self.products_var = None
-        self.ingredients_var = None
-        self.units_var = None
 
     def data_changed_delegate(self):
         self.vc.data_changed_delegate()
 
     def get_recipes_var(self):
-        return self.recipes_var
+        return [list(i) for i in self.db.get_recipes()]
 
     def set_recipes_var(self):
-        self.recipes_var = [list(i) for i in self.db.get_recipes()]
+        # TODO: Implementeras av configuratorn
+        self.data_changed_delegate()
+
+    def get_products_var(self):
+        return [list(i) for i in self.db.get_products()]
+
+    def set_products_var(self, product_name):
+        self.db.set_product(product_name)
+        self.data_changed_delegate()
+
+    def del_products_var(self, product_id):
+        self.db.del_product(product_id)
         self.data_changed_delegate()
