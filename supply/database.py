@@ -92,8 +92,8 @@ class Database(object):
         """
         self.open()
         t = (product_id, )
-        self.conn.execute("DELETE FROM products WHERE id = ?" % t)
-        self.conn.execute("DELETE FROM recipes WHERE productId = ?" % t)
+        self.conn.execute("DELETE FROM products WHERE id = %s" % t)
+        self.conn.execute("DELETE FROM recipes WHERE productId = %s" % t)
         self.conn.commit()
         self.close()
         return False
