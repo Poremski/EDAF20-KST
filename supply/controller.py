@@ -20,10 +20,10 @@ class Controller:
         self.update_data()
 
     def update_data(self):
-        self.model.set_recipes_var()
         self.view.set_recipes_var(self.model.get_recipes_var())
         self.view.set_products_var(self.model.get_products_var())
         self.view.set_ingredients_var(self.model.get_ingredients_var())
+        self.view.set_units_var(self.model.get_units_var())
 
     def data_changed_delegate(self):
         pass
@@ -62,3 +62,18 @@ class Controller:
         else:
             self.view.showerror('Inget att lägga till', 'Det finns ingen ingrediens att lägga till.')
 
+    def btn_add_recipe(self):
+        product = self.view.recipes_products_value.get().strip()
+        ingredient = self.view.recipes_ingredients_value.get().strip()
+        amount = self.view.recipes_amount_entry.get()
+        unit = self.view.recipes_units_value.get().strip()
+        if (len(product) and len(ingredient) and len(unit)) > 0 and amount > 0:
+            self.model.set_recipes_var(product.split()[1][:-1], ingredient.split()[1][:-1], amount, unit.split()[0])
+            self.update_data()
+            self.view.showerror('Ingrediensen kopplades till produkten',
+                                'Ingrediensen «%s» med mängden %s%s har nu ' \
+                                'kopplats till produkten %s' %
+                                    (ingredient, amount, unit, product)
+                                )
+        else:
+            self.view.showerror('Mängden är noll', 'Mängden får inte vara 0 %s.' % (unit))

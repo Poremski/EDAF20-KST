@@ -50,7 +50,7 @@ class Database(object):
         """
         self.open()
         t = (product_id, ingredient_id, quantity, unit)
-        self.conn.execute("INSERT INTO recipes VALUES (?, ?, ?, ?)" % t)
+        self.conn.execute("INSERT INTO recipes VALUES (%s, %s, %s, '%s')" % t)
         self.conn.commit()
         self.close()
         return list

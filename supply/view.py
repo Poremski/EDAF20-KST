@@ -37,6 +37,17 @@ class View():
         self.products_entry = StringVar()
         self.ingredients_entry = StringVar()
 
+        self.recipes_products_form = Combobox()
+        self.recipes_products_value = StringVar()
+
+        self.recipes_ingredients_form = Combobox()
+        self.recipes_ingredients_value = StringVar()
+
+        self.recipes_amount_entry = DoubleVar()
+
+        self.recipes_units_form = Combobox()
+        self.recipes_units_value = StringVar()
+
         self.widget_recipes()
         self.widget_config()
 
@@ -59,9 +70,12 @@ class View():
             list += ['(art.nr. %s) %s' % (value[0], value[1])]
         if len(list) > 0:
             self.products_form['values'] = list
+            self.recipes_products_form['values'] = list
         else:
             self.products_form['values'] = ['']
+            self.recipes_products_form['values'] = ['']
         self.products_form.current(0)
+        self.recipes_products_form.current(0)
 
     def get_products_var(self):
         return self.products_var
@@ -73,15 +87,27 @@ class View():
             list += ['(art.nr. %s) %s' % (value[0], value[1])]
         if len(list) > 0:
             self.ingredients_form['values'] = list
+            self.recipes_ingredients_form['values'] = list
         else:
             self.ingredients_form['values'] = ['']
+            self.recipes_ingredients_form['values'] = ['']
         self.ingredients_form.current(0)
+        self.recipes_ingredients_form.current(0)
 
     def get_ingredients_var(self):
         return self.ingredients_var
 
     def set_units_var(self, units):
         self.units_var = units
+        list = []
+        for value in self.get_units_var():
+            list += ['%s (%s)' % (value[0], value[1])]
+        if len(list) > 0:
+            self.recipes_units_form['values'] = list
+        else:
+            self.recipes_units_form['values'] = ['']
+        self.recipes_units_form.current(0)
+
 
     def get_units_var(self):
         return self.units_var
@@ -171,7 +197,25 @@ class View():
         f = Labelframe(p, text='Lägg till ingrediens till produkt')
         p.add(f)
 
-        #####
+        p1 = PanedWindow(f)
+        Label(p1, text='Produkt:').pack(side=LEFT)
+        self.recipes_products_form.__init__(p1, textvariable=self.recipes_products_value, state='readonly')
+        self.recipes_products_form.pack(side=RIGHT, fill=X, expand=TRUE)
+        p1.pack(fill=BOTH, expand=1)
+
+        p2 = PanedWindow(f)
+        Label(p2, text='Ingrediens:').pack(side=LEFT)
+        self.recipes_ingredients_form.__init__(p2, textvariable=self.recipes_ingredients_value, state='readonly')
+        self.recipes_ingredients_form.pack(side=RIGHT, fill=X, expand=TRUE)
+        p2.pack(fill=BOTH, expand=1)
+
+        p3 = PanedWindow(f)
+        Label(p3, text='Mängd:').pack(side=LEFT)
+        Button(f, text='Lägg till', command=self.vc.btn_add_recipe).pack(side=RIGHT)
+        self.recipes_units_form.__init__(p3, textvariable=self.recipes_units_value, state='readonly')
+        self.recipes_units_form.pack(side=RIGHT, fill=X, expand=TRUE)
+        Entry(p3, textvariable=self.recipes_amount_entry).pack(side=RIGHT, fill=X, expand=TRUE)
+        p3.pack(fill=BOTH, expand=1)
 
         p.pack(side=TOP, anchor=W, fill=X, expand=NO)
 
