@@ -42,21 +42,6 @@ class Database(object):
         self.close()
         return list
 
-    def get_customers(self):
-        """
-        Hämtar användardata för alla användare som finns i databasen.
-        Returnerar:
-            Returnerar en lista.
-        """
-        self.open()
-        cursor = self.conn.execute('''
-            SELECT id, customer, address, country
-            FROM customers
-        ''')
-        list = cursor.fetchall()
-        self.close()
-        return list
-
     def get_ingredients(self):
         """
         Hämtar alla ingredienser som finns i databasen.

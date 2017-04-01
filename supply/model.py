@@ -13,11 +13,17 @@ class Model:
     def __init__(self, vc):
         self.vc = vc
         self.db = Database()
-        self.recipes_var = self.get_recipes_dict()
+        self.recipes_var = None
+        self.products_var = None
+        self.ingredients_var = None
+        self.units_var = None
 
-    def get_recipes_dict(self):
-        self.set_recipes_dict()
+    def data_changed_delegate(self):
+        self.vc.data_changed_delegate()
+
+    def get_recipes_var(self):
         return self.recipes_var
 
-    def set_recipes_dict(self):
-        self.recipes_var = self.db.get_recipes()
+    def set_recipes_var(self):
+        self.recipes_var = [list(i) for i in self.db.get_recipes()]
+        self.data_changed_delegate()

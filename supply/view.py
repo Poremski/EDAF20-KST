@@ -1,5 +1,3 @@
-from .configurations import *
-from .controller import *
 from tkinter import *
 from tkinter.ttk import *
 
@@ -13,7 +11,7 @@ class View(Frame):
           -- Vyn har setters och getters som den använder för att kommunicerar 
              med Kontrollern.
     """
-    def __init__(self, vc, parent, recipes):
+    def __init__(self, vc, parent):
         self.vc = vc  # delegate/callback pointer
 
         self.main_frame = Frame(parent)
@@ -22,13 +20,42 @@ class View(Frame):
         self.notebook = Notebook(self.main_frame)
         self.notebook.pack(fill=BOTH, expand=True)
 
-        self.recipes_var = recipes
-        self.products_var = dict()
-        self.ingredients_var = dict()
-        self.units_var = dict()
+        self.tree = Treeview()
+
+        self.recipes_var = [None]
+        self.products_var = [None]
+        self.ingredients_var = [None]
+        self.units_var = [None]
 
         self.widget_recipes()
         self.widget_config()
+
+    def set_recipes_var(self, recipes):
+        self.recipes_var = recipes
+        for i in self.tree.get_children():
+            self.tree.delete(i)
+        self.tree_recipes()
+
+    def get_recipes_var(self):
+        return self.recipes_var
+
+    def set_products_var(self, products):
+        self.products_var = products
+
+    def get_products_var(self):
+        return self.products_var
+
+    def set_ingredients_var(self, ingredients):
+        self.products_var = ingredients
+
+    def get_ingredients_var(self):
+        return self.ingredients_var
+
+    def set_units_var(self, units):
+        self.units_var = units
+
+    def get_units_var(self):
+        return self.units_var
 
     def widget_recipes(self):
         frame = Frame(self.notebook)
@@ -37,22 +64,26 @@ class View(Frame):
         scrollbar = Scrollbar(frame)
         scrollbar.pack(side=RIGHT, fill=Y)
 
-        tree = Treeview(frame, yscrollcommand=scrollbar.set)
-        tree['columns'] = ('A', 'B')
-        tree.column('A', width=200)
-        tree.column('B', width=50)
-        tree.heading('A', text='Ingrediens')
-        tree.heading('B', text='Mängd')
-        tree.pack(fill=BOTH, expand=True)
+        self.tree.__init__(frame, yscrollcommand=scrollbar.set)
+        self.tree['columns'] = ('A', 'B')
+        self.tree.column('A', width=200)
+        self.tree.column('B', width=100)
+        self.tree.heading('A', text='Ingrediens')
+        self.tree.heading('B', text='Mängd')
+        self.tree.pack(fill=BOTH, expand=True)
 
-        scrollbar.config(command=tree.yview)
+        self.tree_recipes()
 
+        scrollbar.config(command=self.tree.yview)
+
+    def tree_recipes(self):
         last_product = 0
-        for value in self.recipes_var:
-            if value[0] is not last_product:
-                tree.insert("", value[0], value[0], text=value[1])
-                last_product = value[0]
-            tree.insert(value[0], value[0], '', values=(value[2], '%s %s' % (str(value[3]), value[4])))
+        for value in self.get_recipes_var():
+            if value is not None:
+                if value[0] is not last_product:
+                    self.tree.insert("", value[0], value[0], text=value[1])
+                    last_product = value[0]
+                self.tree.insert(value[0], value[0], '', values=(value[2], '%s %s' % (str(value[3]), value[4])))
 
     def widget_config(self):
         frame = Frame(self.notebook)
@@ -82,7 +113,7 @@ class View(Frame):
         p.add(f)
         Label(f, text='Recept:').pack(side=LEFT)
         Button(f, text='Ta bort').pack(side=RIGHT)
-        v_var = StringVar()
+        v_var = self.get_units_var()
         v = Combobox(f, textvariable=v_var, state='readonly')
         v['values'] = sorted(list({1: 1}))
         v.pack(side=RIGHT, fill=X, expand=TRUE)
