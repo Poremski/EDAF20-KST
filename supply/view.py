@@ -23,14 +23,16 @@ class View():
 
         self.tree = Treeview()
 
-        self.recipes_var = []
         self.products_var = []
+        self.recipes_var = []
         self.ingredients_var = []
         self.units_var = []
 
         self.products_form = Combobox()
         self.products_value = StringVar()
 
+        self.ingredients_form = Combobox()
+        self.ingredients_value = StringVar()
 
         self.widget_recipes()
         self.widget_config()
@@ -62,7 +64,15 @@ class View():
         return self.products_var
 
     def set_ingredients_var(self, ingredients):
-        self.products_var = ingredients
+        self.ingredients_var = ingredients
+        list = []
+        for value in self.get_ingredients_var():
+            list += ['(art.nr. %s) %s' % (value[0], value[1])]
+        if len(list) > 0:
+            self.ingredients_form['values'] = list
+        else:
+            self.ingredients_form['values'] = ['']
+        self.ingredients_form.current(0)
 
     def get_ingredients_var(self):
         return self.ingredients_var
@@ -123,14 +133,12 @@ class View():
 
     def widget_config_delete_recipe(self, frame):
         p = Panedwindow(frame, orient=VERTICAL)
-        f = Labelframe(p, text='Ta bort recept')
+        f = Labelframe(p, text='Ta bort ingrediens')
         p.add(f)
-        Label(f, text='Recept:').pack(side=LEFT)
-        Button(f, text='Ta bort').pack(side=RIGHT)
-        v_var = self.get_units_var()
-        v = Combobox(f, textvariable=v_var, state='readonly')
-        v['values'] = sorted(list({1: 1}))
-        v.pack(side=RIGHT, fill=X, expand=TRUE)
+        Label(f, text='Ingrediens:').pack(side=LEFT)
+        Button(f, text='Ta bort', command=self.vc.btn_delete_ingredient).pack(side=RIGHT)
+        self.ingredients_form.__init__(f, textvariable=self.ingredients_form, state='readonly')
+        self.ingredients_form.pack(side=RIGHT, fill=X, expand=TRUE)
         p.pack(side=TOP, anchor=W, fill=X, expand=NO)
 
     def widget_config_add_product(self, frame):

@@ -23,6 +23,7 @@ class Controller:
         self.model.set_recipes_var()
         self.view.set_recipes_var(self.model.get_recipes_var())
         self.view.set_products_var(self.model.get_products_var())
+        self.view.set_ingredients_var(self.model.get_ingredients_var())
 
     def data_changed_delegate(self):
         pass
@@ -35,8 +36,13 @@ class Controller:
         else:
             self.view.showerror('Inget att ta bort', 'Det finns inget att ta bort.')
 
-    def btn_delete_recipe(self):
-        pass
+    def btn_delete_ingredient(self):
+        list = self.view.ingredients_form.get()
+        if len(list) is not 0:
+            self.model.del_ingredients_var(self.view.ingredients_form.get().split()[1][:-1])
+            self.update_data()
+        else:
+            self.view.showerror('Inget att ta bort', 'Det finns inget att ta bort.')
 
     def btn_add_product(self):
         pass
