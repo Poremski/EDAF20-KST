@@ -34,6 +34,9 @@ class View():
         self.ingredients_form = Combobox()
         self.ingredients_value = StringVar()
 
+        self.products_entry = StringVar()
+        self.ingredients_entry = StringVar()
+
         self.widget_recipes()
         self.widget_config()
 
@@ -147,8 +150,8 @@ class View():
         p.add(f)
 
         Label(f, text='Produkt:').pack(side=LEFT)
-        Button(f, text='Lägg till').pack(side=RIGHT)
-        Entry(f).pack(side=RIGHT, fill=X, expand=TRUE)
+        Button(f, text='Lägg till', command=self.vc.btn_add_product).pack(side=RIGHT)
+        Entry(f, textvariable=self.products_entry).pack(side=RIGHT, fill=X, expand=TRUE)
 
         p.pack(side=TOP, anchor=W, fill=X, expand=NO)
 
@@ -158,8 +161,8 @@ class View():
         p.add(f)
 
         Label(f, text='Ingrediens:').pack(side=LEFT)
-        Button(f, text='Lägg till').pack(side=RIGHT)
-        Entry(f).pack(side=RIGHT, fill=X, expand=TRUE)
+        Button(f, text='Lägg till', command=self.vc.btn_add_ingredient).pack(side=RIGHT)
+        Entry(f, textvariable=self.ingredients_entry).pack(side=RIGHT, fill=X, expand=TRUE)
 
         p.pack(side=TOP, anchor=W, fill=X, expand=NO)
 
