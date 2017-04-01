@@ -20,8 +20,8 @@ class Model:
     def get_recipes_var(self):
         return [list(i) for i in self.db.get_recipes()]
 
-    def set_recipes_var(self):
-        # TODO: Implementeras av configuratorn
+    def set_recipes_var(self, product, ingredient, amount, unit):
+        self.db.set_recipes(product, ingredient, amount, unit)
         self.data_changed_delegate()
 
     def get_products_var(self):
@@ -45,3 +45,10 @@ class Model:
     def del_ingredients_var(self, ingredients_id):
         self.db.del_ingredients(ingredients_id)
         self.data_changed_delegate()
+
+    def get_units_var(self):
+        """
+        Returnerar en lista på samtliga enheter och dess namn.
+        Returns: Lista på enheter och dess namn.
+        """
+        return [list(i) for i in self.db.get_units()]
