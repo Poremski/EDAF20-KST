@@ -37,6 +37,7 @@ class Database(object):
             SELECT r.productId, p.product, i.ingredient, r.quantity, r.unit
             FROM recipes AS r, products AS p, ingredients AS i
             WHERE r.productId = p.id AND r.ingredientId = i.id
+            ORDER BY productId
         ''')
         list = cursor.fetchall()
         self.close()

@@ -136,7 +136,7 @@ class View():
         for value in self.get_recipes_var():
             if value is not None:
                 if value[0] is not last_product:
-                    self.tree.insert("", value[0], value[0], text=value[1])
+                    self.tree.insert('', value[0], value[0], text=value[1])
                     last_product = value[0]
                 self.tree.insert(value[0], value[0], '', values=(value[2], '%s %s' % (str(value[3]), value[4])))
 
