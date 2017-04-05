@@ -19,5 +19,5 @@ install:
   - pip install --upgrade pip
   - pip install -r requirements.txt --cache-dir $HOME/.pip-cache
 script:
-  - python test/supply.py
-  - python test/manufacture.py
+  - python test_supply.py
+  - python test_manufacture.py
