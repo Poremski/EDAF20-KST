@@ -13,8 +13,8 @@ class Controller:
     """
     def __init__(self, parent):
         self.parent = parent
-        self.parent.title(APP_NAME)
-        self.parent.geometry(WIN_GEOMETRY)
+        #self.parent.title(APP_NAME)
+        #self.parent.geometry(WIN_GEOMETRY)
         self.model = Model(self)
         self.view = View(self, self.parent)
         self.update_data()
