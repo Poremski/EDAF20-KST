@@ -4,6 +4,7 @@ from tkinter import *
 from tkinter.ttk import *
 from supply.controller import Controller as Supply
 from manufacture.controller import Controller as Manufacture
+from customer.controller import Controller as Customer
 
 
 class Krusty:
@@ -25,6 +26,10 @@ class Krusty:
 
         delivery = Frame(notebook)
         notebook.add(delivery, text='Leveransenheten')
+
+        customer = Frame(notebook)
+        notebook.add(customer, text='Kundrelationsenheten')
+        Customer(customer)
 
         notebook.pack(fill=BOTH, expand=True)
 
@@ -80,7 +85,7 @@ class Krusty:
                  'Vi har genom detta därmed uppnått de mål som uttrycks i kursplanen för den berörda \n' \
                  'kursen.\n\n' \
                  'De involverade i projektet:\n     Javier Poremski och Simon Farre\n' \
-                 'Datum:\n     2017-04-05'
+                 'Datum:\n     2017-05-11'
 
         Label(frame, text=txtmsg).grid(row=1, column=1)
 
