@@ -20,7 +20,7 @@ class Controller:
         self.update_data()
 
     def update_data(self):
-        pass
+        self.view.set_list_blocked(self.model.get_blocked_var())
 
     def data_changed_delegate(self):
         pass

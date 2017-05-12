@@ -1,7 +1,7 @@
 CREATE TABLE customers
 (
     id INTEGER PRIMARY KEY,
-    customer TEXT NOT NULL,
+    customer TEXT UNIQUE NOT NULL,
     address TEXT NOT NULL,
     country TEXT(2) NOT NULL
 );
@@ -19,7 +19,7 @@ INSERT INTO 'customers' (customer,address,country) VALUES
 CREATE TABLE units
 (
     unit TEXT PRIMARY KEY NOT NULL,
-    name TEXT NOT NULL
+    name TEXT UNIQUE NOT NULL
 );
 CREATE UNIQUE INDEX units_name_uindex ON units (name);
 INSERT INTO 'units' (unit, name) VALUES
@@ -32,7 +32,7 @@ INSERT INTO 'units' (unit, name) VALUES
 CREATE TABLE ingredients
 (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    ingredient TEXT NOT NULL
+    ingredient TEXT UNIQUE NOT NULL
 );
 CREATE UNIQUE INDEX ingredients_ingredient_uindex ON ingredients (ingredient);
 INSERT INTO 'ingredients' (ingredient) VALUES
@@ -45,7 +45,7 @@ INSERT INTO 'ingredients' (ingredient) VALUES
 CREATE TABLE products
 (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    product TEXT NOT NULL
+    product TEXT UNIQUE NOT NULL
 );
 CREATE UNIQUE INDEX products_product_uindex ON products (product);
 INSERT INTO 'products' (product) VALUES
@@ -71,3 +71,49 @@ INSERT INTO 'recipes' (productId, ingredientId, quantity, unit) VALUES
 ('5','2','400','g'),('5','8','270','g'),('5','17','279','g'),('5','1','400','g'),
 ('5','10','10','g'),('6','1','350','g'),('6','2','250','g'),('6','3','100','g'),
 ('6','12','50','g'),('6','19','5','g'),('6','10','50','g');
+
+CREATE TABLE orders
+(
+    id INTEGER PRIMARY KEY NOT NULL,
+    customer INTEGER NOT NULL,
+    delivery_date DATE,
+    created DATE,
+    CONSTRAINT orders_customers_id_fk FOREIGN KEY (customer) REFERENCES customers (id)
+);
+
+INSERT INTO 'orders' (customer, delivery_date, created) VALUES
+(1, null, DATE('now')),
+(2, null, DATE('now')),
+(3, null, DATE('now'));
+
+CREATE TABLE product_orders
+(
+  id INTEGER PRIMARY KEY NOT NULL,
+  product INTEGER NOT NULL,
+  'order' INTEGER NOT NULL,
+  quantity INTEGER NOT NULL,
+  created DATE,
+  CONSTRAINT pallets_products_id_fk FOREIGN KEY (product) REFERENCES products (id),
+  CONSTRAINT pallets_orders_id_fk FOREIGN KEY ('order') REFERENCES orders (id)
+);
+
+INSERT INTO 'product_orders' (product, 'order', quantity, created) VALUES
+(1, 1, 3, DATE('now')),
+(2, 1, 1, DATE('now')),
+(3, 1, 2, DATE('now')),
+(2, 2, 2, DATE('now')),
+(3, 2, 1, DATE('now')),
+(4, 3, 2, DATE('now'));
+
+
+CREATE TABLE pallets
+(
+  barcode INTEGER PRIMARY KEY NOT NULL,
+  product INTEGER NOT NULL,
+  'order' INTEGER NOT NULL,
+  location TEXT NOT NULL,
+  blocked BOOLEAN DEFAULT FALSE,
+  created DATE,
+  CONSTRAINT pallets_products_id_fk FOREIGN KEY (product) REFERENCES products (id),
+  CONSTRAINT pallets_orders_id_fk FOREIGN KEY ('order') REFERENCES orders (id)
+);

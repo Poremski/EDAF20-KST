@@ -21,8 +21,6 @@ class View():
         self.notebook = Notebook(self.main_frame)
         self.notebook.pack(fill=BOTH, expand=True)
 
-        self.tree = Treeview()
-
         self.customer_entry = StringVar()
         self.address_entry = StringVar()
         self.country_entry = StringVar()

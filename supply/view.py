@@ -67,7 +67,7 @@ class View():
         self.products_var = products
         list = []
         for value in self.get_products_var():
-            list += ['(art.nr. %s) %s' % (value[0], value[1])]
+            list += ['%s' % (value[1])]
         if len(list) > 0:
             self.products_form['values'] = list
             self.recipes_products_form['values'] = list
@@ -84,7 +84,7 @@ class View():
         self.ingredients_var = ingredients
         list = []
         for value in self.get_ingredients_var():
-            list += ['(art.nr. %s) %s' % (value[0], value[1])]
+            list += ['%s' % (value[1])]
         if len(list) > 0:
             self.ingredients_form['values'] = list
             self.recipes_ingredients_form['values'] = list

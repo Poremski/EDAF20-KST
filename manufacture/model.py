@@ -16,3 +16,6 @@ class Model:
 
     def data_changed_delegate(self):
         self.vc.data_changed_delegate()
+
+    def get_blocked_var(self):
+        return [list(i)[0] for i in self.db.get_blocked_pallets()]

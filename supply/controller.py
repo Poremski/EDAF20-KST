@@ -31,7 +31,7 @@ class Controller:
     def btn_delete_product(self):
         list = self.view.products_form.get()
         if len(list) is not 0:
-            self.model.del_products_var(self.view.products_form.get().split()[1][:-1])
+            self.model.del_products_var(self.view.products_form.get())
             self.update_data()
         else:
             self.view.showerror('Inget att ta bort', 'Det finns ingen produkt att ta bort.')
@@ -39,7 +39,7 @@ class Controller:
     def btn_delete_ingredient(self):
         list = self.view.ingredients_form.get()
         if len(list) is not 0:
-            self.model.del_ingredients_var(self.view.ingredients_form.get().split()[1][:-1])
+            self.model.del_ingredients_var(self.view.ingredients_form.get())
             self.update_data()
         else:
             self.view.showerror('Inget att ta bort', 'Det finns ingen ingrediens att ta bort.')
@@ -68,7 +68,8 @@ class Controller:
         amount = self.view.recipes_amount_entry.get()
         unit = self.view.recipes_units_value.get().strip()
         if (len(product) and len(ingredient) and len(unit)) > 0 and amount > 0:
-            self.model.set_recipes_var(product.split()[1][:-1], ingredient.split()[1][:-1], amount, unit.split()[0])
+            #self.model.set_recipes_var(product.split()[1][:-1], ingredient.split()[1][:-1], amount, unit.split()[0])
+            self.model.set_recipes_var(product, ingredient, amount, unit.split()[0])
             self.update_data()
             self.view.showerror('Ingrediensen kopplades till produkten',
                                 'Ingrediensen «%s» med mängden %s%s har nu ' \

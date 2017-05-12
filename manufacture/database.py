@@ -25,3 +25,10 @@ class Database(object):
         Stänger en förbindelse med databasen.
         """
         self.conn.close()
+
+    def get_blocked_pallets(self):
+        self.open()
+        cursor = self.conn.execute("SELECT barcode FROM pallets WHERE blocked = 1")
+        list = cursor.fetchall()
+        self.close()
+        return list
