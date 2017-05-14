@@ -33,6 +33,27 @@ class Database(object):
         self.close()
         return list
 
+    def get_unblocked_pallets(self):
+        self.open()
+        cursor = self.conn.execute("SELECT barcode FROM pallets WHERE blocked = 0 AND location NOT IN ('delivering', 'delivered')")
+        list = cursor.fetchall()
+        self.close()
+        return list
+
+    def block_unblocked_pallet(self, pallet):
+        self.open()
+        self.conn.execute("UPDATE pallets SET blocked = 1 WHERE barcode = %s" % pallet)
+        self.conn.commit()
+        self.close()
+        return False
+
+    def unblock_blocked_pallet(self, pallet):
+        self.open()
+        self.conn.execute("UPDATE pallets SET blocked = 0 WHERE barcode = %s" % pallet)
+        self.conn.commit()
+        self.close()
+        return False
+
     def get_order_list(self, chk_list):
         sql_blocked = ''
         if chk_list[0] is 1 and chk_list[1] is 1:

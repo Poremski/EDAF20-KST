@@ -25,7 +25,10 @@ class View():
         self.treeview_pallets = Treeview()
 
         self.blocked_var = []
-        self.blocked_value = StringVar()
+        self.blocked_form = Combobox()
+        self.unblocked_var = []
+        self.unblocked_form = Combobox()
+
         self.order_var = []
 
         self.check_blocked = IntVar()
@@ -48,6 +51,9 @@ class View():
 
         self.widget_pallets()
         self.widget_blocked_pallets()
+
+    def showerror(self, title, message):
+        messagebox.showerror(title, message)
 
     def widget_pallets(self):
         frame = Frame(self.notebook)
@@ -139,10 +145,55 @@ class View():
     def get_pall_var(self):
         return self.order_var
 
+    def get_blocked_var(self):
+        return self.blocked_var
+
+    def get_unblocked_var(self):
+        return self.unblocked_var
+
+    def set_blocked_var(self, blocked):
+        self.blocked_var = blocked
+        list = []
+        for value in self.get_blocked_var():
+            list += ['%s' % (value[0])]
+        if len(list) > 0:
+            self.blocked_form['values'] = list
+        else:
+            self.blocked_form['values'] = ['']
+        self.blocked_form.current(0)
+
+    def set_unblocked_var(self, unblocked):
+        self.unblocked_var = unblocked
+        list = []
+        for value in self.get_unblocked_var():
+            list += ['%s' % (value[0])]
+        if len(list) > 0:
+            self.unblocked_form['values'] = list
+        else:
+            self.unblocked_form['values'] = ['']
+        self.unblocked_form.current(0)
+
     def widget_blocked_pallets(self):
         frame = Frame(self.notebook)
         self.notebook.add(frame, text='Säljstopp')
 
+        blocked_win = Panedwindow(frame, orient=VERTICAL)
+        blocked_frame = Labelframe(blocked_win, text='Blockera pall')
+        blocked_win.add(blocked_frame)
+        Label(blocked_frame, text='Pallkod:').pack(side=LEFT)
+        Button( blocked_frame, text='Blockera', command=self.vc.block_pallet).pack(side=RIGHT)
+        self.blocked_form.__init__(blocked_frame, textvariable=self.blocked_form, values=self.blocked_var, state='readonly')
+        self.blocked_form.pack(side=RIGHT, fill=X, expand=TRUE)
+        blocked_win.pack(side=TOP, anchor=W, fill=X, expand=NO)
+
+        unblocked_win = Panedwindow(frame, orient=VERTICAL)
+        unblocked_frame = Labelframe(unblocked_win, text='Avblockera pall')
+        unblocked_win.add(unblocked_frame)
+        Label(unblocked_frame, text='Pallkod:').pack(side=LEFT)
+        Button(unblocked_frame, text='Avblockera', command=self.vc.unblock_pallet).pack(side=RIGHT)
+        self.unblocked_form.__init__(unblocked_frame, textvariable=self.unblocked_form, values=self.unblocked_var, state='readonly')
+        self.unblocked_form.pack(side=RIGHT, fill=X, expand=TRUE)
+        unblocked_win.pack(side=TOP, anchor=W, fill=X, expand=NO)
 
     def set_order_list_var(self, order):
         self.order_var = order

@@ -18,7 +18,16 @@ class Model:
         self.vc.data_changed_delegate()
 
     def get_blocked_var(self):
-        return [list(i)[0] for i in self.db.get_blocked_pallets()]
+        return [list(i) for i in self.db.get_blocked_pallets()]
+
+    def get_unblocked_var(self):
+        return [list(i) for i in self.db.get_unblocked_pallets()]
 
     def get_order_list_var(self,  chk_list):
         return [list(i) for i in self.db.get_order_list(chk_list)]
+
+    def unblock_blocked_var(self, pallet):
+        self.db.unblock_blocked_pallet(pallet)
+
+    def block_unblocked_var(self, pallet):
+        self.db.block_unblocked_pallet(pallet)
