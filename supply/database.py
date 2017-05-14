@@ -43,13 +43,21 @@ class Database(object):
         self.close()
         return list
 
-    def set_recipes(self, product_id, ingredient_id, quantity, unit):
+    def set_recipes(self, product, ingredient, quantity, unit):
         """
         Lägger till recept för en produkt.
         Returnerar:
             Returnerar en lista.
         """
         self.open()
+        cursor = self.conn.execute("SELECT id FROM products WHERE product = '%s'" % (product,))
+        for result in cursor.fetchall():
+            product_id = result[0]
+
+        cursor = self.conn.execute("SELECT id FROM ingredients WHERE ingredient = '%s'" % (ingredient,))
+        for result in cursor.fetchall():
+            ingredient_id = result[0]
+
         t = (product_id, ingredient_id, quantity, unit)
         self.conn.execute("INSERT INTO recipes VALUES (%s, %s, %s, '%s')" % t)
         self.conn.commit()
@@ -83,7 +91,7 @@ class Database(object):
         self.close()
         return False
 
-    def del_product(self, product_id):
+    def del_product(self, product):
         """
         Tar bort en produkt i databasen.
         Args:
@@ -92,9 +100,12 @@ class Database(object):
         Returns:    Returnerar True om produkten har blivit borttagen, annars False.
         """
         self.open()
-        t = (product_id, )
-        self.conn.execute("DELETE FROM products WHERE id = %s" % t)
-        self.conn.execute("DELETE FROM recipes WHERE productId = %s" % t)
+        cursor = self.conn.execute("SELECT id FROM products WHERE product = '%s'" % (product,))
+        for result in cursor.fetchall():
+            product_id = result[0]
+
+        self.conn.execute("DELETE FROM products WHERE id = %s" % product_id)
+        self.conn.execute("DELETE FROM recipes WHERE productId = %s" % product_id)
         self.conn.commit()
         self.close()
         return False
@@ -127,7 +138,7 @@ class Database(object):
         self.close()
         return False
 
-    def del_ingredients(self,ingredient_id):
+    def del_ingredients(self,ingredient):
         """
         Tar bort en ingrediens från database.
         Args:
@@ -137,9 +148,11 @@ class Database(object):
 
         """
         self.open()
-        t = (ingredient_id, )
-        self.conn.execute("DELETE FROM ingredients WHERE id = %s" % t)
-        self.conn.execute("DELETE FROM recipes WHERE ingredientId = %s" % t)
+        cursor = self.conn.execute("SELECT id FROM ingredients WHERE ingredient = '%s'" % (ingredient,))
+        for result in cursor.fetchall():
+            ingredient_id = result[0]
+        self.conn.execute("DELETE FROM ingredients WHERE id = %s" % (ingredient_id,))
+        self.conn.execute("DELETE FROM recipes WHERE ingredientId = %s" % (ingredient_id,))
         self.conn.commit()
         self.close()
         return False
