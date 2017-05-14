@@ -21,6 +21,4 @@ class Controller:
 
     def update_data(self):
         self.view.set_list_blocked(self.model.get_blocked_var())
-
-    def data_changed_delegate(self):
-        pass
+        self.view.set_order_list_var(self.model.get_order_list_var())

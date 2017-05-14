@@ -32,3 +32,10 @@ class Database(object):
         list = cursor.fetchall()
         self.close()
         return list
+
+    def get_order_list(self):
+        self.open()
+        cursor = self.conn.execute("SELECT o.id, c.customer, o.created, p.created, barcode, pr.product, location, blocked, delivery_date FROM orders AS o, customers AS c, product_orders AS po, pallets AS p, products AS pr WHERE o.customer = c.id AND o.id = po.'order' AND po.'order' = p.'order' AND po.product = pr.id AND po.product = p.product")
+        list = cursor.fetchall()
+        self.close()
+        return list
