@@ -94,3 +94,41 @@ class Database(object):
         list = cursor.fetchall()
         self.close()
         return list
+
+    def get_order_pall_list(self):
+        self.open()
+        cursor = self.conn.execute("SELECT DISTINCT po.'order', c.customer FROM product_orders AS po, orders AS o, customers AS c WHERE po.'order' = o.id AND o.customer = c.id AND po.quantity > (SELECT COUNT(p.product) FROM pallets AS p WHERE p.'order' = po.'order' AND p.product = po.product)")
+        list = cursor.fetchall()
+        self.close()
+        return list
+
+    def get_order_products(self, order):
+        self.open()
+        cursor = self.conn.execute("SELECT DISTINCT pr.product, po.quantity, (SELECT COUNT(p.product) FROM pallets AS p WHERE p.'order' = po.'order' AND p.product = po.product) FROM product_orders AS po, orders AS o, customers AS c, products AS pr WHERE po.'order' = o.id AND o.customer = c.id AND po.product = pr.id AND po.'order' = %s AND po.quantity > (SELECT COUNT(p.product) FROM pallets AS p WHERE p.'order' = po.'order' AND p.product = po.product)" % order)
+        list = cursor.fetchall()
+        self.close()
+        return list
+
+    def create_pallet(self, order, product):
+        self.open()
+        cursor = self.conn.execute("SELECT id FROM products WHERE product = '%s'" % (product, ))
+        p = cursor.fetchall()
+        p = [list(i)[0] for i in p][0]
+        self.conn.execute("INSERT INTO pallets (product, 'order', location, blocked, created) VALUES(%s, %s, 'production', 0, DATE('now'))" % (order, p))
+        self.conn.commit()
+        self.close()
+        return False
+
+    def get_pallets(self):
+        self.open()
+        cursor = self.conn.execute("SELECT barcode FROM pallets")
+        list = cursor.fetchall()
+        self.close()
+        return list
+
+    def update_location(self, pallet, location):
+        self.open()
+        self.conn.execute("UPDATE pallets SET location = '%s' WHERE barcode = %s" % (location, pallet))
+        self.conn.commit()
+        self.close()
+        return False

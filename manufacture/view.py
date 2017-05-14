@@ -29,6 +29,16 @@ class View():
         self.unblocked_var = []
         self.unblocked_form = Combobox()
 
+        self.order_pall_var = []
+        self.order_pall_form = Combobox()
+        self.order_product_var = []
+        self.order_product_form = Combobox()
+
+        self.pallet_var = []
+        self.pallet_form = Combobox()
+        self.location_var = []
+        self.location_form = Combobox()
+
         self.order_var = []
 
         self.check_blocked = IntVar()
@@ -51,6 +61,7 @@ class View():
 
         self.widget_pallets()
         self.widget_blocked_pallets()
+        self.widget_create_pallets()
 
     def showerror(self, title, message):
         messagebox.showerror(title, message)
@@ -145,11 +156,26 @@ class View():
     def get_pall_var(self):
         return self.order_var
 
+    def get_pallet_var(self):
+        return self.pallet_var
+
+    def get_order_pall_var(self):
+        return self.order_pall_var
+
     def get_blocked_var(self):
         return self.blocked_var
 
     def get_unblocked_var(self):
         return self.unblocked_var
+
+    def get_location_var(self):
+        return self.location_var
+
+    def get_pallet_var(self):
+        return self.pallet_var
+
+    def get_order_product_var(self):
+        return self.order_product_var
 
     def set_blocked_var(self, blocked):
         self.blocked_var = blocked
@@ -162,6 +188,17 @@ class View():
             self.blocked_form['values'] = ['']
         self.blocked_form.current(0)
 
+    def set_location_var(self, locations):
+        self.location_var = locations
+        list = []
+        for value in self.get_location_var():
+            list += ['%s' % (value)]
+        if len(list) > 0:
+            self.location_form['values'] = list
+        else:
+            self.location_form['values'] = ['']
+        self.location_form.current(0)
+
     def set_unblocked_var(self, unblocked):
         self.unblocked_var = unblocked
         list = []
@@ -172,6 +209,39 @@ class View():
         else:
             self.unblocked_form['values'] = ['']
         self.unblocked_form.current(0)
+
+    def set_order_pall_var(self, orders):
+        self.order_pall_var = orders
+        list = []
+        for value in self.get_order_pall_var():
+            list += ['Ordernummer %s (%s)' % (value[0], value[1])]
+        if len(list) > 0:
+            self.order_pall_form['values'] = list
+        else:
+            self.order_pall_form['values'] = ['']
+        self.order_pall_form.current(0)
+
+    def set_product_var(self, products):
+        self.order_product_var = products
+        list = []
+        for value in self.get_order_product_var():
+            list += ['%s (pall %s av %s)' % (value[0], value[2]+1, value[1])]
+        if len(list) > 0:
+            self.order_product_form['values'] = list
+        else:
+            self.order_product_form['values'] = ['']
+        self.order_product_form.current(0)
+
+    def set_pallet_var(self, pallets):
+        self.pallet_var = pallets
+        list = []
+        for value in self.get_pallet_var():
+            list += ['Pallkod %s' % (value[0])]
+        if len(list) > 0:
+            self.pallet_form['values'] = list
+        else:
+            self.pallet_form['values'] = ['']
+        self.pallet_form.current(0)
 
     def widget_blocked_pallets(self):
         frame = Frame(self.notebook)
@@ -197,6 +267,41 @@ class View():
 
     def set_order_list_var(self, order):
         self.order_var = order
+        self.treeview_pallets.delete(*self.treeview_pallets.get_children())
+        """
         for i in self.treeview_pallets.get_children():
             self.treeview_pallets.delete(i)
+        """
         self.tree_orders()
+
+    def widget_create_pallets(self):
+        frame = Frame(self.notebook)
+        self.notebook.add(frame, text='Administration')
+
+        create_win = Panedwindow(frame, orient=VERTICAL)
+        create_frame = Labelframe(create_win, text='Skapa pall')
+        create_win.add(create_frame)
+        Label(create_frame, text='Order:').pack(side=LEFT)
+        Button(create_frame, text='Skapa pall', command=self.vc.create_pallet).pack(side=RIGHT)
+        self.order_pall_form.__init__(create_frame, textvariable=self.order_pall_form, values=self.order_pall_var, state='readonly')
+        self.order_pall_form.pack(side=LEFT, fill=X, expand=TRUE)
+        self.order_pall_form.bind('<<ComboboxSelected>>', self.update_products)
+        Label(create_frame, text='Produkt:').pack(side=LEFT)
+        self.order_product_form.__init__(create_frame, textvariable=self.order_product_form, values=self.order_product_var, state='readonly')
+        self.order_product_form.pack(side=LEFT, fill=X, expand=TRUE)
+        create_win.pack(side=TOP, anchor=W, fill=X, expand=NO)
+
+        update_win = Panedwindow(frame, orient=VERTICAL)
+        update_frame = Labelframe(update_win, text='Uppdatera pall')
+        update_win.add(update_frame)
+        Label(update_frame, text='Pall:').pack(side=LEFT)
+        Button(update_frame, text='Uppdatera pall', command=self.vc.update_pallet).pack(side=RIGHT)
+        self.pallet_form.__init__(update_frame, textvariable=self.pallet_form, values=self.pallet_var, state='readonly')
+        self.pallet_form.pack(side=LEFT, fill=X, expand=TRUE)
+        Label(update_frame, text='Placering:').pack(side=LEFT)
+        self.location_form.__init__(update_frame, textvariable=self.location_form, values=self.location_var, state='readonly')
+        self.location_form.pack(side=LEFT, fill=X, expand=TRUE)
+        update_win.pack(side=TOP, anchor=W, fill=X, expand=NO)
+
+    def update_products(self, event):
+        self.vc.update_products()
