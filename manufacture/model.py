@@ -20,5 +20,5 @@ class Model:
     def get_blocked_var(self):
         return [list(i)[0] for i in self.db.get_blocked_pallets()]
 
-    def get_order_list_var(self):
-        return [list(i) for i in self.db.get_order_list()]
+    def get_order_list_var(self,  chk_list):
+        return [list(i) for i in self.db.get_order_list(chk_list)]

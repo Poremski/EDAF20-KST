@@ -28,23 +28,23 @@ class View():
         self.blocked_value = StringVar()
         self.order_var = []
 
-        self.check_blocked = BooleanVar()
-        self.check_unblocked = BooleanVar()
-        self.check_production = BooleanVar()
-        self.check_freezing = BooleanVar()
-        self.check_packbags = BooleanVar()
-        self.check_packbox = BooleanVar()
-        self.check_loadpallet = BooleanVar()
-        self.check_storage = BooleanVar()
-        self.check_ramp = BooleanVar()
-        self.check_delivering = BooleanVar()
-        self.check_delivered = BooleanVar()
+        self.check_blocked = IntVar()
+        self.check_unblocked = IntVar()
+        self.check_production = IntVar()
+        self.check_freezing = IntVar()
+        self.check_packbags = IntVar()
+        self.check_packbox = IntVar()
+        self.check_loadpallet = IntVar()
+        self.check_storage = IntVar()
+        self.check_ramp = IntVar()
+        self.check_delivering = IntVar()
+        self.check_delivered = IntVar()
 
         for i in [self.check_blocked, self.check_unblocked, self.check_production,
                   self.check_freezing, self.check_packbags, self.check_packbox,
                   self.check_loadpallet, self.check_storage, self.check_ramp,
                   self.check_delivering, self.check_delivered]:
-            i.set(True)
+            i.set(1)
 
         self.widget_pallets()
         self.widget_blocked_pallets()
@@ -76,19 +76,52 @@ class View():
 
         self.tree_orders()
 
-        chk_a = Checkbutton(frame, text='Blockerade pall', variable=self.check_blocked, onvalue=True,offvalue=False).pack(side=TOP, anchor=W)
-        chk_b = Checkbutton(frame, text='Oblockerade pall', variable=self.check_unblocked, onvalue=True,offvalue=False).pack(side=TOP, anchor=W)
-        chk_c = Checkbutton(frame, text='Produktion', variable=self.check_production, onvalue=True,offvalue=False).pack(side=TOP, anchor=W)
-        chk_d = Checkbutton(frame, text='Frysning', variable=self.check_freezing, onvalue=True,offvalue=False).pack(side=TOP, anchor=W)
-        chk_e = Checkbutton(frame, text='Påsning', variable=self.check_packbags, onvalue=True,offvalue=False).pack(side=TOP, anchor=W)
-        chk_f = Checkbutton(frame, text='Lådning', variable=self.check_packbox, onvalue=True,offvalue=False).pack(side=TOP, anchor=W)
-        chk_g = Checkbutton(frame, text='Pallning', variable=self.check_loadpallet, onvalue=True,offvalue=False).pack(side=TOP, anchor=W)
-        chk_h = Checkbutton(frame, text='Förvaring', variable=self.check_storage, onvalue=True,offvalue=False).pack(side=TOP, anchor=W)
-        chk_i = Checkbutton(frame, text='Lastning', variable=self.check_ramp, onvalue=True,offvalue=False).pack(side=TOP, anchor=W)
-        chk_j = Checkbutton(frame, text='Levereras', variable=self.check_delivering, onvalue=True,offvalue=False).pack(side=TOP, anchor=W)
-        chk_l = Checkbutton(frame, text='Levererat', variable=self.check_delivered, onvalue=True,offvalue=False).pack(side=TOP, anchor=W)
+        Checkbutton(frame, text='Blockerade pall', variable=self.check_blocked,
+                    onvalue=True, offvalue=False,
+                    command=self.update_list).pack(side=TOP, anchor=W)
+        Checkbutton(frame, text='Oblockerade pall', variable=self.check_unblocked,
+                    onvalue=True, offvalue=False,
+                    command=self.update_list).pack(side=TOP, anchor=W)
+        Checkbutton(frame, text='Produktion', variable=self.check_production,
+                    onvalue=True, offvalue=False,
+                    command=self.update_list).pack(side=TOP, anchor=W)
+        Checkbutton(frame, text='Frysning', variable=self.check_freezing,
+                    onvalue=True, offvalue=False,
+                    command=self.update_list).pack(side=TOP, anchor=W)
+        Checkbutton(frame, text='Påsning', variable=self.check_packbags,
+                    onvalue=True, offvalue=False,
+                    command=self.update_list).pack(side=TOP, anchor=W)
+        Checkbutton(frame, text='Lådning', variable=self.check_packbox,
+                    onvalue=True, offvalue=False,
+                    command=self.update_list).pack(side=TOP, anchor=W)
+        Checkbutton(frame, text='Pallning', variable=self.check_loadpallet,
+                    onvalue=True, offvalue=False,
+                    command=self.update_list).pack(side=TOP, anchor=W)
+        Checkbutton(frame, text='Förvaring', variable=self.check_storage,
+                    onvalue=True, offvalue=False,
+                    command=self.update_list).pack(side=TOP, anchor=W)
+        Checkbutton(frame, text='Lastning', variable=self.check_ramp,
+                    onvalue=True, offvalue=False,
+                    command=self.update_list).pack(side=TOP, anchor=W)
+        Checkbutton(frame, text='Levereras', variable=self.check_delivering,
+                    onvalue=True, offvalue=False,
+                    command=self.update_list).pack(side=TOP, anchor=W)
+        Checkbutton(frame, text='Levererat', variable=self.check_delivered,
+                    onvalue=True, offvalue=False,
+                    command=self.update_list).pack(side=TOP, anchor=W)
 
         scrollbar.config(command=self.treeview_pallets)
+
+    def update_list(self):
+        self.vc.update_data()
+
+    def get_chk_list(self):
+        return [self.check_blocked.get(), self.check_unblocked.get(),
+                self.check_production.get(), self.check_freezing.get(),
+                self.check_packbags.get(), self.check_packbox.get(),
+                self.check_loadpallet.get(), self.check_storage.get(),
+                self.check_ramp.get(), self.check_delivering.get(),
+                self.check_delivered.get()]
 
     def tree_orders(self):
         last_order = 0
@@ -108,20 +141,8 @@ class View():
 
     def widget_blocked_pallets(self):
         frame = Frame(self.notebook)
-        self.notebook.add(frame, text='Blockerade pallar')
+        self.notebook.add(frame, text='Säljstopp')
 
-        scrollbar = Scrollbar(frame)
-        scrollbar.pack(side=RIGHT, fill=Y)
-
-        self.listbox_blocked.__init__(frame)
-        self.listbox_blocked.pack(fill=BOTH, expand=True)
-
-        scrollbar.config(command=self.listbox_blocked)
-
-    def set_list_blocked(self, list):
-        self.blocked_var = list
-        for b in self.blocked_var:
-            self.listbox_blocked.insert(END, 'Barcode: ' + str(b))
 
     def set_order_list_var(self, order):
         self.order_var = order

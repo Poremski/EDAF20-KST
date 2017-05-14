@@ -20,5 +20,4 @@ class Controller:
         self.update_data()
 
     def update_data(self):
-        self.view.set_list_blocked(self.model.get_blocked_var())
-        self.view.set_order_list_var(self.model.get_order_list_var())
+        self.view.set_order_list_var(self.model.get_order_list_var(self.view.get_chk_list()))
