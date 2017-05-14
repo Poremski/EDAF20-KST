@@ -24,8 +24,8 @@ class Krusty:
         notebook.add(manufacture, text='Tillverkningsenheten')
         Manufacture(manufacture)
 
-        delivery = Frame(notebook)
-        notebook.add(delivery, text='Leveransenheten')
+        #delivery = Frame(notebook)
+        #notebook.add(delivery, text='Leveransenheten')
 
         customer = Frame(notebook)
         notebook.add(customer, text='Kundrelationsenheten')
