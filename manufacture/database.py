@@ -114,10 +114,40 @@ class Database(object):
         cursor = self.conn.execute("SELECT id FROM products WHERE product = '%s'" % (product, ))
         p = cursor.fetchall()
         p = [list(i)[0] for i in p][0]
+
+        cursor = self.conn.execute("SELECT ingredientID, quantity, unit FROM recipes WHERE productId = %s" % (p, ))
+        for ingredient in [list(i) for i in cursor.fetchall()]:
+            self.update_raw_storage(ingredient[0], ingredient[1], ingredient[2])
         self.conn.execute("INSERT INTO pallets (product, 'order', location, blocked, created) VALUES(%s, %s, 'production', 0, DATE('now'))" % (p, order))
         self.conn.commit()
         self.close()
         return False
+
+    def update_raw_storage(self, product, amount, unit):
+        units = [
+            ['kg', 1000],
+            ['hg', 100],
+            ['dag', 10],
+            ['dg', 0.1],
+            ['cg', 0.01],
+            ['mg', 0.001],
+            ['kL', 1000],
+            ['hL', 100],
+            ['daL', 10],
+            ['dL', 0.1],
+            ['cL', 0.01],
+            ['mL', 0.001]
+        ]
+
+        q = amount*54
+
+        for u in units:
+            if u[0] is unit:
+                q *= u[1]
+                break
+
+        self.conn.execute("UPDATE ingredients SET quantity = quantity-%s, last_delivered_quantity = %s, last_delivered_date = DATE('now') WHERE id = %s" % (q, q, product))
+        self.conn.commit()
 
     def get_pallets(self):
         self.open()

@@ -32,15 +32,32 @@ INSERT INTO 'units' (unit, name) VALUES
 CREATE TABLE ingredients
 (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    ingredient TEXT UNIQUE NOT NULL
+    ingredient TEXT UNIQUE NOT NULL,
+    quantity INTEGER NOT NULL,
+    last_delivered_quantity INTEGER NOT NULL,
+    last_delivered_date DATE
 );
 CREATE UNIQUE INDEX ingredients_ingredient_uindex ON ingredients (ingredient);
-INSERT INTO 'ingredients' (ingredient) VALUES
-('Flour'),('Butter'),('Icing sugar'),('Roasted, chopped nuts'),
-('Fine-ground nuts'),('Ground, roasted nuts'),('Bread crumbs'),
-('Sugar'),('Egg whites'),('Chocolate'),('Marzipan'),('Eggs'),
-('Potato starch'),('Wheat flour'),('Sodium bicarbonate'),
-('Vanilla'),('Chopped almonds'),('Cinnamon'),('Vanilla sugar');
+INSERT INTO 'ingredients' (ingredient, quantity, last_delivered_quantity) VALUES
+('Flour', 100000, 0),
+('Butter', 100000, 0),
+('Icing sugar', 100000, 0),
+('Roasted, chopped nuts', 100000, 0),
+('Fine-ground nuts', 100000, 0),
+('Ground, roasted nuts', 100000, 0),
+('Bread crumbs', 100000, 0),
+('Sugar', 100000, 0),
+('Egg whites', 100000, 0),
+('Chocolate', 100000, 0),
+('Marzipan', 100000, 0),
+('Eggs', 100000, 0),
+('Potato starch', 100000, 0),
+('Wheat flour', 100000, 0),
+('Sodium bicarbonate', 100000, 0),
+('Vanilla', 100000, 0),
+('Chopped almonds', 100000, 0),
+('Cinnamon', 100000, 0),
+('Vanilla sugar', 100000, 0);
 
 CREATE TABLE products
 (
@@ -103,7 +120,9 @@ INSERT INTO 'product_orders' (product, 'order', quantity, created) VALUES
 (3, 1, 2, DATE('now')),
 (2, 2, 2, DATE('now')),
 (3, 2, 1, DATE('now')),
-(4, 3, 2, DATE('now'));
+(4, 3, 2, DATE('now')),
+(5, 3, 4, DATE('now')),
+(6, 3, 1, DATE('now'));
 
 
 CREATE TABLE pallets
