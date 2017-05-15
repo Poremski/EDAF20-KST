@@ -114,7 +114,7 @@ class Database(object):
         cursor = self.conn.execute("SELECT id FROM products WHERE product = '%s'" % (product, ))
         p = cursor.fetchall()
         p = [list(i)[0] for i in p][0]
-        self.conn.execute("INSERT INTO pallets (product, 'order', location, blocked, created) VALUES(%s, %s, 'production', 0, DATE('now'))" % (order, p))
+        self.conn.execute("INSERT INTO pallets (product, 'order', location, blocked, created) VALUES(%s, %s, 'production', 0, DATE('now'))" % (p, order))
         self.conn.commit()
         self.close()
         return False
