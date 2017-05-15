@@ -24,7 +24,7 @@ class Controller:
         self.view.set_blocked_var(self.model.get_unblocked_var())
         self.view.set_unblocked_var(self.model.get_blocked_var())
         self.view.set_order_pall_var(self.model.get_order_pall_var())
-        self.update_products()
+        #self.update_products()
         self.view.set_pallet_var(self.model.get_pallet_var())
         self.view.set_location_var(['production', 'freezing', 'packbags', 'packbox', 'loadpallet', 'storage', 'ramp', 'delivering', 'delivered'])
 
@@ -61,7 +61,6 @@ class Controller:
             self.view.showerror('Pall skapad', 'Pallen med produkt «%s» har nu blivit skapad för order «%s»' % (product, order))
         else:
             self.view.showerror('Ingen pall att skapa', 'Det finns ingen pall att skapa.')
-        self.update_products()
 
     def update_pallet(self):
         pallet = self.view.pallet_form.get()

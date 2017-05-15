@@ -220,6 +220,10 @@ class View():
         else:
             self.order_pall_form['values'] = ['']
         self.order_pall_form.current(0)
+        if self.order_pall_form.get() is not '':
+            self.vc.update_products()
+        else:
+            self.set_product_var([])
 
     def set_product_var(self, products):
         self.order_product_var = products
